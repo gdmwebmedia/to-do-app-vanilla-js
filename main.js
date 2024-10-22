@@ -43,14 +43,19 @@ if (checkAuthentication()) {
     // Hide the login and registration forms
     registerForm.style.display = 'none';
     loginForm.style.display = 'none';
+    logoutButton.style.display = 'block';
 } else {
     // User is not authenticated
     // Ensure the forms are visible
     registerForm.style.display = 'block';
     loginForm.style.display = 'block';
+    logoutButton.style.display = 'none';
 }
 
 function displayTasks(tasks) {
+    container.innerHTML='';
+    container.style.display = 'block'
+    console.log('afisez taskurile: ', tasks)
     if (tasks.length === 0) {
         const noTasksWarning = document.createElement('p');
         noTasksWarning.textContent = 'No tasks available';
@@ -59,24 +64,24 @@ function displayTasks(tasks) {
         const taskList = document.createElement('ul');
         tasks.forEach (element => {
             const taskItem = document.createElement('li');
-
+            
             const taskId = document.createElement('div');
             taskId.textContent = element.id;
             taskItem.appendChild(taskId);
-
+            
             const taskResponsible = document.createElement('div');
             taskResponsible.textContent = element.responsible;
             taskItem.appendChild(taskResponsible);
-
+            
             const taskDescription = document.createElement('div');
             taskDescription.textContent = element.description;
             taskItem.appendChild(taskDescription);
-
+            
             const taskStatus = document.createElement('div');
             taskStatus.textContent = element.status;
             taskItem.appendChild(taskStatus);
-
-
+            
+            
             taskList.appendChild(taskItem);
         })
         container.appendChild(taskList);
@@ -94,22 +99,21 @@ registerForm.addEventListener('submit', (event) => {
     registerUser(user)
 })
 
-
 // Handle login form submission
 loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
-
+    
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value.trim();
-
+    
     const isAuthenticated = loginUser(email, password);
-
+    
     if (isAuthenticated) {
         alert('Login successful!');
+        displayTasks(tasks);
         logoutButton.style.display = 'block';
         registerForm.style.display = 'none';
         loginForm.style.display = 'none';
-        displayTasks(tasks);
     } else {
         alert('Invalid email or password.');
         loginForm.reset();
@@ -118,8 +122,8 @@ loginForm.addEventListener('submit', (event) => {
 
 logoutButton.addEventListener('click', () => {
     logout();
-    logoutButton.style.display = 'none';
     registerForm.style.display = 'block';
     loginForm.style.display = 'block';
     container.style.display = 'none'
+    logoutButton.style.display = 'none';
 })
